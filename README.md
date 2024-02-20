@@ -1,5 +1,5 @@
 # Whack-a-Mole borðspilið 
-## Agnes, Baltasar, Ngoan og Svala
+### Agnes, Baltasar, Ngoan og Svala
 
 ### Agnes komin inn á github
 Höfundar og stutt lýsing á borðspili og leikjaspilun.
