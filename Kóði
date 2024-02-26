@@ -1,0 +1,350 @@
+[skjárinn.py]
+from machine import Pin, SoftI2C
+from I2C_LCD import I2cLcd
+from time import sleep_ms
+# Skjárinn nota I2C tengingu til að tala við ESP
+i2c = SoftI2C(scl=Pin(13), sda=Pin(14), freq=400000)
+lcd = I2cLcd(i2c, 0x3f, 2, 16)
+
+def tala():
+    lcd.putstr("Einar er kukur")
+
+while True:
+    # Færi bendilinn í staf nr. 0 og línu nr. 0
+    lcd.move_to(0, 0)
+    tala()
+    # Færi bendilinn í staf nr. 0 og línu nr. 1
+    sleep_ms(1000)
+    lcd.clear()
+    lcd.move_to(0, 0)
+    lcd.putstr("Agnes er frabaer ha ha ha!")
+    sleep_ms(1000)
+    lcd.clear()
+
+# Skoðaðu skrána LCD_API.py til að kynna þér önnur föll sem
+# hægt er að nota með LCD skjánum
+
+[borðspil]
+from machine import Pin,PWM,I2C
+from time import ticks_ms, sleep_ms
+from random import randint
+
+#stóru takkarnir
+st0=Pin(7,Pin.IN,Pin.PULL_UP)
+st1=Pin(15,Pin.IN,Pin.PULL_UP)
+st2=Pin(16,Pin.IN,Pin.PULL_UP)
+st3=Pin(17,Pin.IN,Pin.PULL_UP)
+st4=Pin(18,Pin.IN,Pin.PULL_UP)
+st5=Pin(8,Pin.IN,Pin.PULL_UP)
+st6=Pin(3,Pin.IN,Pin.PULL_UP)
+st7=Pin(46,Pin.IN,Pin.PULL_UP)
+#stóru takka ljósin
+sl0=Pin(47,Pin.OUT)
+sl1=Pin(48,Pin.OUT)
+sl2=Pin(45,Pin.OUT)
+sl3=Pin(0,Pin.OUT)
+sl4=Pin(38,Pin.OUT)
+sl5=Pin(39,Pin.OUT)
+sl6=Pin(40,Pin.OUT)
+sl7=Pin(41,Pin.OUT)
+#litlu takkarnir til þess að velja level(einginn ljós) + einn takki fyrir tíman
+lt1=Pin(9,Pin.IN,Pin.PULL_UP)
+lt2=Pin(10,Pin.IN,Pin.PULL_UP)
+lt3=Pin(11,Pin.IN,Pin.PULL_UP)
+lt4=Pin(2,Pin.IN,Pin.PULL_UP)
+#reset takkinn
+rt=Pin(1,Pin.IN,Pin.PULL_UP)
+#LED ljós
+ll1=Pin(12,Pin.OUT)
+ll2=Pin(13,Pin.OUT)
+ll3=Pin(14,Pin.OUT)
+#skjárinn
+#i2c = I2C(scl=Pin(1), sda=Pin(2), freq=400000)
+#lcd = I2cLcd(i2c, 0x3f, 2, 16)
+from machine import SoftI2C
+from I2C_LCD import I2cLcd
+# Skjárinn nota I2C tengingu til að tala við ESP
+i2c = SoftI2C(scl=Pin(13), sda=Pin(14), freq=400000)
+lcd = I2cLcd(i2c, 0x3f, 2, 16)
+
+
+# Skoðaðu skrána LCD_API.py til að kynna þér önnur föll sem
+# hægt er að nota með LCD skjánum
+
+#rtala1=randint(500,1000) #level 1
+#rtala2=randint(450,700) #level 2
+#rtala3=randint(400,500) #level 3
+#rtalat=randint(0,7)
+
+
+
+upphafstimi1 = 0
+bidtimi1 = 1000
+upphafstimi2 = 0
+bidtimi2 = 1000
+upphafstimi3 = 0
+bidtimi3 = 1000
+upphafstimi4 = 0
+bidtimi4 = 5000
+
+ljos_kveikt = False # Ákveð að ljósið byrji slökkt
+
+level_1=True
+level_2=True
+level_3=True
+
+def kveikja():
+    sl0.value(1)
+    sl1.value(1)
+    sl2.value(1)
+    sl3.value(1)
+    sl4.value(1)
+    sl5.value(1)
+    sl6.value(1)
+    sl7.value(1)
+
+def slokkva():
+    sl0.value(0)
+    sl1.value(0)
+    sl2.value(0)
+    sl3.value(0)
+    sl4.value(0)
+    sl5.value(0)
+    sl6.value(0)
+    sl7.value(0)
+#til þess að velja level
+
+
+#fyrir skjáinn
+def P1():
+    pass
+
+
+#hljóðið (dööööö)
+def hljóð():
+    pass
+# hatalari.duty(512)
+        # Setjum tíðnina á PWM á 440Hz (A nóta)
+        #hatalari.freq(440)
+        # Bíðum í hálfa sekúndu
+        #sleep_ms(500)
+        # Setjum svo PWM tíðnina á 523Hz (C nóta)
+        #hatalari.freq(523)
+        # Bíðun svo í hálfa sekúndu
+        #sleep_ms(500)
+
+start=1
+
+upphafstimi = 0
+bidtimi = 500
+
+ljosid_sem_er_kveikt = -1
+ljosa_bid = 500
+ljosa_upphaf = 0
+ljosb_upphaf=0
+ljosc_upphaf=0
+while True:
+    lt1_stada = lt1.value() # les takkann
+    if lt1_stada == 0: # athuga hvort ýtt var (0 útaf PULL_UP)
+        ljos_kveikt = not ljos_kveikt # víxla gildinu á bool breytunni
+    ll1.value(ljos_kveikt) # skrifa út á ljósið
+    if ll3.value(ljos_kveikt):
+        level_1=not level_1
+        level_2=False
+        level_3=False
+   
+    lt2_stada = lt2.value() # les takkann
+    if lt2_stada == 0: # athuga hvort ýtt var (0 útaf PULL_UP)
+        ljos_kveikt = not ljos_kveikt # víxla gildinu á bool breytunni
+    ll2.value(ljos_kveikt) # skrifa út á ljósið
+    if ll3.value(ljos_kveikt):
+        level_2=not level_2
+        level_1=False
+        level_3=False
+       
+    lt3_stada = lt3.value() # les takkann
+    if lt3_stada == 0: # athuga hvort ýtt var (0 útaf PULL_UP)
+        ljos_kveikt = not ljos_kveikt # víxla gildinu á bool breytunni
+    ll3.value(ljos_kveikt) # skrifa út á ljósið
+    if ll3.value(ljos_kveikt):
+        level_3=not level_3
+        level_2=False
+        level_1=False
+   
+    if level_1==True:
+        for i in range(10):
+            timi_nuna = ticks_ms()
+         #   if timi_nuna - upphafstimi1 > bidtimi1:
+         #       print(ticks_ms())
+         #       slokkva()
+         #      
+         #       upphafstimi1 = timi_nuna
+         #       rtala1=randint(500,800)
+         #       bidtimi1 = rtala1
+            if timi_nuna - ljosa_upphaf > ljosa_bid:
+                ljosid_sem_er_kveikt = randint(0,7)
+                ljosa_bid = randint(250, 600)
+                ljosa_upphaf = timi_nuna
+            if timi_nuna - upphafstimi1 > bidtimi1:
+                slokkva()
+                if ljosid_sem_er_kveikt == 0:
+                    sl0.value(1)
+                if ljosid_sem_er_kveikt == 1:
+                    sl1.value(1)
+                if ljosid_sem_er_kveikt == 2:
+                    sl2.value(1)
+                if ljosid_sem_er_kveikt == 3:
+                    sl3.value(1)
+                if ljosid_sem_er_kveikt == 4:
+                    sl4.value(1)
+                if ljosid_sem_er_kveikt == 5:
+                    sl5.value(1)
+                if ljosid_sem_er_kveikt == 6:
+                    sl6.value(1)
+                if ljosid_sem_er_kveikt == 7:
+                    sl7.value(1)
+                upphafstimi1 = timi_nuna
+                rtala1=randint(500,800)
+                bidtimi1 = rtala1
+            if st0.value() == 0 and ljosid_sem_er_kveikt == 0:
+                stig += 1
+                slokkva()
+            if st1.value() == 0 and ljosid_sem_er_kveikt == 1:
+                stig += 1
+                slokkva()
+            if st2.value() == 0 and ljosid_sem_er_kveikt == 2:
+                stig += 1
+                slokkva()
+            if st3.value() == 0 and ljosid_sem_er_kveikt == 3:
+                stig += 1
+                slokkva()
+            if st4.value() == 0 and ljosid_sem_er_kveikt == 4:
+                stig += 1
+                slokkva()
+            if st5.value() == 0 and ljosid_sem_er_kveikt == 5:
+                stig += 1
+                slokkva()
+            if st6.value() == 0 and ljosid_sem_er_kveikt == 6:
+                stig += 1
+                slokkva()
+            if st7.value() == 0 and ljosid_sem_er_kveikt == 7:
+                stig += 1
+                slokkva()
+   
+           
+               
+    if level_2==True:
+        for i in range(10):
+            timi_nuna = ticks_ms()
+           # if timi_nuna - upphafstimi2 > bidtimi2:
+           #     print(ticks_ms())
+           #     upphafstimi2 = timi_nuna
+           #     rtala2=randint(500,800)
+           #     bidtimi2 = rtala2
+            if timi_nuna - ljosb_upphaf > ljosa_bid:
+                ljosid_sem_er_kveikt = randint(0,7)
+                ljosa_bid = randint(250, 600)
+                ljosb_upphaf=timi_nuna
+            if timi_nuna - upphafstimi2 > bidtimi2:
+                slokkva()
+                if ljosid_sem_er_kveikt == 0:
+                    sl0.value(1)
+                if ljosid_sem_er_kveikt == 1:
+                    sl1.value(1)
+                if ljosid_sem_er_kveikt == 2:
+                    sl2.value(1)
+                if ljosid_sem_er_kveikt == 3:
+                    sl3.value(1)
+                if ljosid_sem_er_kveikt == 4:
+                    sl4.value(1)
+                if ljosid_sem_er_kveikt == 5:
+                    sl5.value(1)
+                if ljosid_sem_er_kveikt == 6:
+                    sl6.value(1)
+                if ljosid_sem_er_kveikt == 7:
+                    sl7.value(1)
+                upphafstimi1 = timi_nuna
+                rtala2=randint(500,800)
+                bidtimi2 = rtala2
+            if st0.value() == 0 and ljosid_sem_er_kveikt == 0:
+                stig += 1
+                slokkva()
+            if st1.value() == 0 and ljosid_sem_er_kveikt == 1:
+                stig += 1
+                slokkva()
+            if st2.value() == 0 and ljosid_sem_er_kveikt == 2:
+                stig += 1
+                slokkva()
+            if st3.value() == 0 and ljosid_sem_er_kveikt == 3:
+                stig += 1
+                slokkva()
+            if st4.value() == 0 and ljosid_sem_er_kveikt == 4:
+                stig += 1
+                slokkva()
+            if st5.value() == 0 and ljosid_sem_er_kveikt == 5:
+                stig += 1
+                slokkva()
+            if st6.value() == 0 and ljosid_sem_er_kveikt == 6:
+                stig += 1
+                slokkva()
+            if st7.value() == 0 and ljosid_sem_er_kveikt == 7:
+                stig += 1
+                slokkva()
+
+    if level_3==True:
+        for i in range(10):
+            timi_nuna = ticks_ms()
+          #  if timi_nuna - upphafstimi3 > bidtimi3:
+          #      print(ticks_ms())
+          #      upphafstimi3 = timi_nuna
+          #      rtala3=randint(500,800)
+          #      bidtimi3 = rtala3
+            if timi_nuna - ljosc_upphaf > ljosa_bid:
+                ljosid_sem_er_kveikt = randint(0,7)
+                ljosa_bid = randint(250, 600)
+                ljosc_upphaf=timi_nuna
+            if timi_nuna - upphafstimi3 > bidtimi3:
+                slokkva()
+                if ljosid_sem_er_kveikt == 0:
+                    sl0.value(1)
+                if ljosid_sem_er_kveikt == 1:
+                    sl1.value(1)
+                if ljosid_sem_er_kveikt == 2:
+                    sl2.value(1)
+                if ljosid_sem_er_kveikt == 3:
+                    sl3.value(1)
+                if ljosid_sem_er_kveikt == 4:
+                    sl4.value(1)
+                if ljosid_sem_er_kveikt == 5:
+                    sl5.value(1)
+                if ljosid_sem_er_kveikt == 6:
+                    sl6.value(1)
+                if ljosid_sem_er_kveikt == 7:
+                    sl7.value(1)
+                upphafstimi1 = timi_nuna
+                rtala3=randint(500,800)
+                bidtimi3 = rtala3
+            if st0.value() == 0 and ljosid_sem_er_kveikt == 0:
+                stig += 1
+                slokkva()
+            if st1.value() == 0 and ljosid_sem_er_kveikt == 1:
+                stig += 1
+                slokkva()
+            if st2.value() == 0 and ljosid_sem_er_kveikt == 2:
+                stig += 1
+                slokkva()
+            if st3.value() == 0 and ljosid_sem_er_kveikt == 3:
+                stig += 1
+                slokkva()
+            if st4.value() == 0 and ljosid_sem_er_kveikt == 4:
+                stig += 1
+                slokkva()
+            if st5.value() == 0 and ljosid_sem_er_kveikt == 5:
+                stig += 1
+                slokkva()
+            if st6.value() == 0 and ljosid_sem_er_kveikt == 6:
+                stig += 1
+                slokkva()
+            if st7.value() == 0 and ljosid_sem_er_kveikt == 7:
+                stig += 1
+                slokkva()
