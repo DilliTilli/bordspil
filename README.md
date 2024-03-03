@@ -14,6 +14,7 @@ Ljósmyndir af borðspili (inní kassa og utan)
 ![IMG_8417 thumbnail](https://github.com/DilliTilli/bordspil/assets/159776066/57297693-bc96-46bc-9c2d-2fd6e07c4445)
 
 Ljósmyndir af lóðun (báðar hliðar).
+
 ![IMG_8398 thumbnail](https://github.com/DilliTilli/bordspil/assets/159776066/a36ad476-7b5b-4989-80d8-6ae1a68ea19d)
 ![IMG_8399 thumbnail](https://github.com/DilliTilli/bordspil/assets/159776066/546e6fab-2fd0-496b-9298-b9e3d74cff14)
 ![IMG_8400 thumbnail](https://github.com/DilliTilli/bordspil/assets/159776066/0bd0f3ba-d778-49af-85f5-b63e82b4b2b7)
